@@ -13,7 +13,8 @@
             overflow-x: hidden; 
         }
         
-        #punto-subida { width: 100%; height: 1px; }
+        /* Punto de referencia para el scroll automático */
+        #punto-subida { width: 100%; height: 5px; margin-top: -10px; }
 
         .portada { 
             width: 100%; height: 180px; 
@@ -77,15 +78,21 @@
 
         .galeria-artes { width: 100%; padding: 20px; text-align: center; border-top: 1px solid #222; box-sizing: border-box; }
         .grid-artes { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 12px; padding: 15px 0; max-width: 1000px; margin: 0 auto; }
-        .caja-arte { aspect-ratio: 1/1; background: #1a1a1a; border-radius: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid #333; cursor: pointer; transition: 0.3s; }
+        
+        /* DISEÑO SELECCIONADO */
+        .caja-arte { 
+            aspect-ratio: 1/1; background: #1a1a1a; border-radius: 12px; 
+            display: flex; align-items: center; justify-content: center; 
+            border: 1px solid #333; cursor: pointer; transition: 0.2s; 
+        }
+        .caja-arte.activo { border: 3px solid var(--amarillo); transform: scale(1.05); background: #222; }
         .caja-arte img { max-width: 80%; max-height: 80%; object-fit: contain; }
 
-        /* MODAL SLIDER CORREGIDO */
+        /* MODAL */
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.98); backdrop-filter: blur(5px); overflow: hidden; }
         .cerrar-modal { position: absolute; top: 20px; right: 20px; color: white; font-size: 45px; font-weight: bold; cursor: pointer; z-index: 1010; }
-        
         .slider-container { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; }
-        .slider-wrapper { display: flex; height: 100%; width: 100%; transition: transform 0.4s ease-out; will-change: transform; }
+        .slider-wrapper { display: flex; height: 100%; width: 100%; transition: transform 0.4s ease-out; }
         .slide { min-width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; padding: 10px; box-sizing: border-box; }
         .slide img { max-width: 100%; max-height: 85vh; object-fit: contain; border-radius: 15px; }
 
@@ -93,9 +100,8 @@
             position: absolute; top: 50%; transform: translateY(-50%); 
             background: rgba(255,255,255,0.1); color: white; border: none; 
             font-size: 30px; padding: 20px; border-radius: 50%; 
-            cursor: pointer; z-index: 1005; transition: 0.3s;
+            cursor: pointer; z-index: 1005; 
         }
-        .flecha-nav:hover { background: rgba(255,255,255,0.3); }
         .prev { left: 20px; }
         .next { right: 20px; }
 
@@ -154,7 +160,7 @@
             <script>
                 const artes = ['1.png','2.png','4.png','5.png','6.png','7.png','8.png','9.png','10.png','11.png','12.png','13.png','14.png','15.png','16.png','17.png','19.png','20.png','23.png','24.png','25.png','26.png','30.png'];
                 artes.forEach(a => {
-                    document.write(`<div class="caja-arte" onclick="cambiarArte('${a}')"><img src="${a}"></div>`);
+                    document.write(`<div class="caja-arte" id="btn-${a}" onclick="cambiarArte('${a}')"><img src="${a}"></div>`);
                 });
             </script>
         </div>
@@ -172,11 +178,20 @@
 
     <script>
         function pintar(f) { document.getElementById('camiseta-fondo').style.filter = f; }
+
         function cambiarArte(src) { 
+            // 1. Cambiar imagen
             document.getElementById('img-personalizada').src = src; 
+            
+            // 2. Scroll automático hacia arriba (al visor)
             document.getElementById('punto-subida').scrollIntoView({ behavior: 'smooth' });
+
+            // 3. Resaltar el botón seleccionado
+            document.querySelectorAll('.caja-arte').forEach(c => c.classList.remove('activo'));
+            document.getElementById('btn-' + src).classList.add('activo');
         }
 
+        // --- GALERIA SLIDER ---
         const fotosEntregadas = ['foto1.png', 'foto2.png', 'foto3.png', 'foto4.png']; 
         const wrapper = document.getElementById('sliderWrapper');
         const dotsContainer = document.getElementById('sliderDots');
@@ -204,6 +219,7 @@
         function abrirModal() { document.getElementById('modalColeccion').style.display = "block"; document.body.style.overflow = "hidden"; irAlSlide(0); }
         function cerrarModal() { document.getElementById('modalColeccion').style.display = "none"; document.body.style.overflow = "auto"; }
 
+        // --- MOVIMIENTO ARTE ---
         const arte = document.getElementById('arte-cliente');
         let drag = false;
         function mover(x, y) {
