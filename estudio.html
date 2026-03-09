@@ -7,12 +7,10 @@
     <style>
         :root { --amarillo: #ffcc00; --verde: #25d366; --negro-puro: #000; --gris-oscuro: #1a1a1a; --gris-claro: #333; }
         
-        /* BLOQUEO DE ZOOM Y DESPLAZAMIENTO LATERAL */
         html, body { 
             margin: 0; background: var(--negro-puro); color: white; 
             font-family: 'Arial Black', sans-serif; 
-            overflow-x: hidden; width: 100%; position: relative;
-            touch-action: manipulation; /* Evita zoom accidental */
+            overflow-x: hidden; width: 100%; touch-action: manipulation;
         }
         
         #punto-subida { width: 100%; height: 5px; }
@@ -30,30 +28,21 @@
             width: 100%; max-width: 1200px; box-sizing: border-box;
         }
 
-        /* VISOR - BLOQUEADO PARA QUE NADA SE SALGA */
         .visor-estudio { 
             position: relative; width: 95vw; height: 95vw; 
             max-width: 420px; max-height: 420px;
             background: #111; border-radius: 25px; border: 1px solid #333;
             display: flex; justify-content: center; align-items: center; 
-            overflow: hidden; /* Esto evita que el diseño "estire" la pantalla */
-            touch-action: none; /* Bloquea gestos del sistema para mover el logo libremente */
+            overflow: hidden; touch-action: none;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
         #camiseta-fondo { width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
         .logo-marca-fijo { position: absolute; width: 12%; top: 32%; left: 23%; z-index: 5; pointer-events: none; }
         
-        /* CONTENEDOR DEL ARTE */
         #arte-cliente { 
-            position: absolute; 
-            width: 140px; 
-            z-index: 10; 
-            cursor: move; 
-            top: 40%; 
-            left: 40%; 
-            touch-action: none; 
-            will-change: transform;
+            position: absolute; width: 140px; z-index: 10; 
+            cursor: move; top: 40%; left: 40%; touch-action: none; 
         }
         #img-personalizada { width: 100%; display: block; pointer-events: none; }
 
@@ -65,6 +54,12 @@
             padding: 5px; background: #000; border-radius: 15px;
         }
         .circulo { width: 38px; height: 38px; border-radius: 50%; cursor: pointer; border: 2px solid #333; transition: 0.2s; margin: auto; }
+
+        .btn-coleccion {
+            background: var(--gris-claro); color: white; padding: 18px; border-radius: 20px;
+            font-weight: bold; font-size: 14px; border: 2px solid #555; cursor: pointer;
+            width: 100%; margin-top: 10px;
+        }
 
         .btn-whatsapp { 
             background: var(--verde); color: white; padding: 18px; 
@@ -84,17 +79,21 @@
         .caja-arte.activo { border: 3px solid var(--amarillo); transform: scale(1.05); }
         .caja-arte img { max-width: 80%; max-height: 80%; object-fit: contain; }
 
-        /* MODAL */
+        /* MODAL SLIDER */
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.98); backdrop-filter: blur(5px); }
         .cerrar-modal { position: absolute; top: 20px; right: 20px; color: white; font-size: 45px; font-weight: bold; cursor: pointer; z-index: 1010; }
-        .slider-container { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; }
+        .slider-container { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
         .slider-wrapper { display: flex; height: 100%; width: 100%; transition: transform 0.4s ease-out; }
         .slide { min-width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
         .slide img { max-width: 90%; max-height: 85vh; object-fit: contain; }
 
-        .flecha-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); color: white; border: none; font-size: 30px; padding: 20px; border-radius: 50%; z-index: 1005; }
-        .prev { left: 10px; }
-        .next { right: 10px; }
+        .flecha-nav { 
+            position: absolute; top: 50%; transform: translateY(-50%); 
+            background: rgba(255,255,255,0.1); color: white; border: none; 
+            font-size: 30px; padding: 20px; border-radius: 50%; z-index: 1005; 
+        }
+        .prev { left: 20px; }
+        .next { right: 20px; }
     </style>
 </head>
 <body>
@@ -105,7 +104,7 @@
     <div class="contenedor-principal">
         <div class="visor-estudio" id="espacio-trabajo">
             <img src="camiseta-base.jpg" id="camiseta-fondo">
-            <img src="logo-mami.png" class="logo-marca-fijo" onerror="this.style.display='none'">
+            <img src="logo-mami.png" class="logo-marca-fijo">
             <div id="arte-cliente">
                 <img src="5.png" id="img-personalizada">
             </div>
@@ -121,7 +120,7 @@
                     <div class="circulo" style="background:#00008b;" onclick="pintar('brightness(0.3) sepia(1) hue-rotate(190deg) saturate(8)')"></div>
                     <div class="circulo" style="background:#00ff00;" onclick="pintar('brightness(0.6) sepia(1) hue-rotate(80deg) saturate(10)')"></div>
                 </div>
-                <button class="btn-coleccion" onclick="abrirModal()">🔥 VER NUESTRA COLECCIÓN</button>
+                <button class="btn-coleccion" onclick="abrirModal()">📷 VER NUESTROS TRABAJOS</button>
             </div>
             
             <div class="tarjeta">
@@ -136,14 +135,7 @@
 
     <div class="galeria-artes">
         <h3 style="color:var(--amarillo);">🎨 ELIGE TU DISEÑO</h3>
-        <div class="grid-artes" id="galeria-disenos">
-            <script>
-                const artes = ['1.png','2.png','4.png','5.png','6.png','7.png','8.png','9.png','10.png','11.png','12.png','13.png','14.png','15.png','16.png','17.png','19.png','20.png','23.png','24.png','25.png','26.png','30.png'];
-                artes.forEach(a => {
-                    document.write(`<div class="caja-arte" id="btn-${a}" onclick="cambiarArte('${a}')"><img src="${a}"></div>`);
-                });
-            </script>
-        </div>
+        <div class="grid-artes" id="galeria-disenos"></div>
     </div>
 
     <div id="modalColeccion" class="modal">
@@ -158,6 +150,19 @@
     <script>
         function pintar(f) { document.getElementById('camiseta-fondo').style.filter = f; }
 
+        // LISTA DE DISEÑOS BASADA EN TU CARPETA
+        const misDisenos = ['1.png','2.png','3.png','4.png','5.png','6.png','7.png','8.png','9.png','10.png','11.png','12.png','13.png','14.png','15.png','16.png','17.png','18.png','19.png','20.png','21.png','23.png','24.png','25.png','26.png','30.png','100.png','101.png','102.png'];
+        
+        const contenedorGaleria = document.getElementById('galeria-disenos');
+        misDisenos.forEach(a => {
+            const caja = document.createElement('div');
+            caja.className = "caja-arte";
+            caja.id = `btn-${a}`;
+            caja.onclick = () => cambiarArte(a);
+            caja.innerHTML = `<img src="${a}">`;
+            contenedorGaleria.appendChild(caja);
+        });
+
         function cambiarArte(src) { 
             document.getElementById('img-personalizada').src = src; 
             document.getElementById('punto-subida').scrollIntoView({ behavior: 'smooth' });
@@ -165,7 +170,26 @@
             document.getElementById('btn-' + src).classList.add('activo');
         }
 
-        // --- MOVIMIENTO ARTE CORREGIDO PARA MÓVIL ---
+        // SLIDER DE ENTREGAS
+        const fotosEntregadas = ['foto1.png', 'foto2.png', 'foto3.png']; 
+        const wrapper = document.getElementById('sliderWrapper');
+        let currentIndex = 0;
+
+        fotosEntregadas.forEach(foto => {
+            const slide = document.createElement('div');
+            slide.className = 'slide';
+            slide.innerHTML = `<img src="entregas/${foto}" onerror="this.src='logo-mami.png'">`;
+            wrapper.appendChild(slide);
+        });
+
+        function updateSlider() { wrapper.style.transform = `translateX(-${currentIndex * 100}%)`; }
+        function slideSiguiente() { currentIndex = (currentIndex + 1) % fotosEntregadas.length; updateSlider(); }
+        function slideAnterior() { currentIndex = (currentIndex - 1 + fotosEntregadas.length) % fotosEntregadas.length; updateSlider(); }
+
+        function abrirModal() { document.getElementById('modalColeccion').style.display = "block"; document.body.style.overflow = "hidden"; }
+        function cerrarModal() { document.getElementById('modalColeccion').style.display = "none"; document.body.style.overflow = "auto"; }
+
+        // MOVIMIENTO DEL LOGO
         const arte = document.getElementById('arte-cliente');
         const visor = document.getElementById('espacio-trabajo');
         let drag = false;
@@ -173,46 +197,18 @@
         function mover(x, y) {
             if(!drag) return;
             const r = visor.getBoundingClientRect();
-            
-            // Calculamos la posición nueva
             let newX = x - r.left - (arte.offsetWidth / 2);
             let newY = y - r.top - (arte.offsetHeight / 2);
-
-            // LIMITAMOS EL MOVIMIENTO para que no estire la pantalla
-            if (newX < -arte.offsetWidth/2) newX = -arte.offsetWidth/2;
-            if (newX > r.width - arte.offsetWidth/2) newX = r.width - arte.offsetWidth/2;
-            if (newY < -arte.offsetHeight/2) newY = -arte.offsetHeight/2;
-            if (newY > r.height - arte.offsetHeight/2) newY = r.height - arte.offsetHeight/2;
-
             arte.style.left = newX + 'px';
             arte.style.top = newY + 'px';
         }
 
-        // Mouse Events
         arte.onmousedown = () => drag = true;
         window.onmouseup = () => drag = false;
         window.onmousemove = (e) => mover(e.clientX, e.clientY);
-
-        // Touch Events (Importante para evitar que la imagen se agrande sola)
-        arte.addEventListener('touchstart', (e) => { 
-            drag = true; 
-        }, {passive: false});
-
-        window.addEventListener('touchend', () => { 
-            drag = false; 
-        });
-
-        window.addEventListener('touchmove', (e) => { 
-            if(drag) { 
-                e.preventDefault(); // BLOQUEA el scroll y zoom del navegador mientras arrastras
-                mover(e.touches[0].clientX, e.touches[0].clientY); 
-            } 
-        }, {passive: false});
-
-        // --- MODAL Y SLIDER ---
-        function abrirModal() { document.getElementById('modalColeccion').style.display = "block"; document.body.style.overflow = "hidden"; }
-        function cerrarModal() { document.getElementById('modalColeccion').style.display = "none"; document.body.style.overflow = "auto"; }
-        // (El resto del código del slider se mantiene igual que antes)
+        arte.addEventListener('touchstart', () => drag = true, {passive: false});
+        window.addEventListener('touchend', () => drag = false);
+        window.addEventListener('touchmove', (e) => { if(drag) { e.preventDefault(); mover(e.touches[0].clientX, e.touches[0].clientY); } }, {passive: false});
     </script>
 </body>
 </html>
