@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Relájese Mami | Gana tu Camiseta</title>
+    <title>Vualá | Gana tu Camiseta</title>
     <style>
         :root { 
             --verde-vuala: #25d366; 
@@ -105,11 +105,11 @@
     </div>
 
     <script>
-        // Imágenes originales: 100, 101, 102
         const figuras = ['100.png', '101.png', '102.png']; 
         let intentosRestantes = 3;
 
-        // Reinicio de probabilidad (5% de ganar algo en esta sesión)
+        // SORTEO INICIAL: Se decide si esta sesión es ganadora apenas abre la página
+        // Solo el 5% de las sesiones (5 de cada 100) tendrán el premio disponible.
         const esSesionGanadora = (Math.floor(Math.random() * 100) + 1) <= 5;
 
         function cargarReel(id, fFinal = null) {
@@ -131,11 +131,12 @@
 
             let res = [];
             
-            // Gana en el último intento si la sesión es afortunada
+            // Si la sesión es ganadora y es el ÚLTIMO intento (o podrías ponerlo en el 1ero), gana.
+            // Para que sea más emocionante, haremos que gane en su último intento si es afortunado.
             if (esSesionGanadora && intentosRestantes === 0) {
-                const premioAzar = Math.floor(Math.random() * 3);
-                res = [premioAzar, premioAzar, premioAzar];
+                res = [0, 0, 0]; // Imágenes iguales (100.png)
             } else {
+                // Siempre pierde si no es sesión ganadora o si aún no es el último intento
                 res = [0, 1, 2].sort(() => Math.random() - 0.5);
             }
             
@@ -163,7 +164,7 @@
             const btnFinal = document.getElementById('btnEntrar');
 
             if (res[0] === res[1] && res[1] === res[2]) {
-                m.innerHTML = "🏆 ¡BRUTAL! <br> GANASTE UN PREMIO";
+                m.innerHTML = "🏆 ¡BRUTAL! <br> GANASTE TU CAMISETA GRATIS";
                 btn.style.display = 'none';
                 btnFinal.style.display = 'block';
             } else if (intentosRestantes > 0) {
