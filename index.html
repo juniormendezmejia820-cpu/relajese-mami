@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RELÁJESE MAMI | Gana tu Premio</title>
+    <title>RELÁJESE MAMI | Gana tu Camiseta</title>
     <style>
         :root { 
-            --amarillo: #ffcc00;
-            --verde-vuala: #25d366; 
+            --verde-mami: #25d366; 
+            --verde-brillante: #2ef77a;
         }
         
         body, html { 
@@ -21,33 +21,33 @@
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             border: none; z-index: 1;
-            filter: brightness(0.3); 
+            filter: brightness(0.5); 
         }
 
         .capa-overlay {
             position: relative; z-index: 10;
             display: flex; justify-content: center; align-items: center;
             height: 100vh;
-            background: rgba(0, 0, 0, 0.6);
+            background: rgba(0, 0, 0, 0.3);
         }
 
         .casino-container { 
-            background: rgba(15, 15, 15, 0.9); 
+            background: rgba(15, 15, 15, 0.8); 
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            padding: 30px 20px; 
-            border: 2px solid var(--amarillo); 
+            padding: 40px 25px; 
+            border: 2px solid var(--verde-mami); 
             border-radius: 40px; 
-            box-shadow: 0 0 30px rgba(255, 204, 0, 0.2); 
+            box-shadow: 0 0 30px rgba(37, 211, 102, 0.2); 
             text-align: center; 
             width: 85%; max-width: 380px; 
         }
 
         .titulo-moda {
-            color: var(--amarillo);
+            color: white;
             font-size: 1.2rem;
             text-transform: uppercase;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .btn { 
@@ -60,13 +60,12 @@
         }
 
         .btn-girar { 
-            background: linear-gradient(180deg, var(--amarillo) 0%, #ccaa00 100%);
-            color: black; 
-            box-shadow: 0 6px 0 #886600;
+            background: linear-gradient(180deg, var(--verde-brillante) 0%, var(--verde-mami) 100%);
+            color: white; 
+            box-shadow: 0 6px 0 #128c7e;
         }
         
-        .btn-girar:active { transform: translateY(4px); box-shadow: 0 2px 0 #886600; }
-        .btn-girar:disabled { background: #555; box-shadow: none; color: #888; cursor: not-allowed; }
+        .btn-girar:active { transform: translateY(4px); box-shadow: 0 2px 0 #128c7e; }
 
         .slot-box { 
             display: flex; justify-content: center; gap: 10px; 
@@ -77,7 +76,7 @@
         .reel img { width: 80px; height: 80px; display: block; object-fit: cover; }
         .spinning { filter: blur(3px); }
 
-        #mensaje { color: white; font-weight: bold; margin-top: 15px; font-size: 1rem; line-height: 1.4; }
+        #mensaje { color: var(--verde-brillante); font-weight: bold; margin-top: 15px; font-size: 1.1rem; }
     </style>
 </head>
 <body>
@@ -86,20 +85,17 @@
 
     <div class="capa-overlay">
         <div class="casino-container">
-            <h2 class="titulo-moda">🎰 CASINO RELÁJESE MAMI 🎰</h2>
+            <h2 class="titulo-moda">🎰 ¡PRUEBA TU SUERTE! 🎰</h2>
             
-            <div id="seccion-juego">
-                <div class="slot-box">
-                    <div class="slot"><div class="reel" id="r1"></div></div>
-                    <div class="slot"><div class="reel" id="r2"></div></div>
-                    <div class="slot"><div class="reel" id="r3"></div></div>
-                </div>
-
-                <p style="color:white; font-size: 0.9rem;">Intentos: <span id="intentos" style="color:var(--amarillo);">3</span>/3</p>
-                
-                <button id="btnSpin" onclick="lanzarSuerte()" class="btn btn-girar">¡GIRAR AHORA!</button>
+            <div class="slot-box">
+                <div class="slot"><div class="reel" id="r1"></div></div>
+                <div class="slot"><div class="reel" id="r2"></div></div>
+                <div class="slot"><div class="reel" id="r3"></div></div>
             </div>
 
+            <p style="color:white; font-size: 0.9rem;">Intentos: <span id="intentos" style="color:var(--verde-brillante);">3</span>/3</p>
+            
+            <button id="btnSpin" onclick="lanzarSuerte()" class="btn btn-girar">¡GIRAR AHORA!</button>
             <p id="mensaje"></p>
             
             <button onclick="cerrarCasino()" id="btnEntrar" class="btn btn-girar" style="display: none; margin-top: 20px;">
@@ -109,17 +105,17 @@
     </div>
 
     <script>
-        // Imágenes de premios: 1.png (Domicilio), 2.png (20% Desc), 3.png (Camiseta)
-        const figuras = ['1.png', '2.png', '3.png']; 
+        // Imágenes correctas: 100, 101, 102
+        const figuras = ['100.png', '101.png', '102.png']; 
         let intentosRestantes = 3;
 
-        // Probabilidad de ganar algo en esta sesión (ej. 15% de probabilidad total)
+        // Lógica de sorteo: Camiseta (102.png), 20% Desc (101.png), Domicilio (100.png)
         const azar = Math.floor(Math.random() * 100) + 1;
         let premioAsignado = null; 
 
-        if (azar <= 2) premioAsignado = 2;      // 2% Gana Camiseta (3.png)
-        else if (azar <= 10) premioAsignado = 1; // 8% Gana 20% Desc (2.png)
-        else if (azar <= 20) premioAsignado = 0; // 10% Gana Domicilio (1.png)
+        if (azar <= 2) premioAsignado = 2; // 102.png (Camiseta)
+        else if (azar <= 10) premioAsignado = 1; // 101.png (Descuento)
+        else if (azar <= 20) premioAsignado = 0; // 100.png (Domicilio)
 
         function cargarReel(id, fFinal = null) {
             const r = document.getElementById('r' + id);
@@ -130,8 +126,6 @@
             r.innerHTML = contenido;
             return f;
         }
-
-        // Carga inicial de los tambores
         cargarReel(1); cargarReel(2); cargarReel(3);
 
         function lanzarSuerte() {
@@ -139,14 +133,12 @@
             intentosRestantes--;
             document.getElementById('intentos').innerText = intentosRestantes;
             document.getElementById('btnSpin').disabled = true;
-            document.getElementById('mensaje').innerText = "¡Mucha suerte...";
 
             let res = [];
-            // Si tiene premio y es el último intento, lo mostramos.
+            // Si es ganador y es el último intento
             if (premioAsignado !== null && intentosRestantes === 0) {
                 res = [premioAsignado, premioAsignado, premioAsignado];
             } else {
-                // Genera una combinación que NO sea ganadora (al menos uno diferente)
                 res = [0, 1, 2].sort(() => Math.random() - 0.5);
             }
             
@@ -174,15 +166,15 @@
             const btnFinal = document.getElementById('btnEntrar');
 
             if (res[0] === res[1] && res[1] === res[2]) {
-                const premiosTexto = ["¡DOMICILIO GRATIS!", "¡20% DE DESCUENTO!", "¡LA CAMISETA ES TUYA!"];
-                m.innerHTML = `<span style="color:var(--amarillo)">🏆 ¡BRUTAL! 🏆</span><br>${premiosTexto[res[0]]}`;
+                const premiosTexto = ["¡DOMICILIO GRATIS!", "¡20% DE DESCUENTO!", "¡GANASTE TU CAMISETA!"];
+                m.innerHTML = "🏆 ¡BRUTAL! <br>" + premiosTexto[res[0]];
                 btn.style.display = 'none';
                 btnFinal.style.display = 'block';
             } else if (intentosRestantes > 0) {
                 btn.disabled = false;
                 m.innerText = "¡Casi! Te queda otra oportunidad.";
             } else {
-                m.innerHTML = "No hubo suerte esta vez...<br>¡Pero crea tu diseño ahora!";
+                m.innerText = "¡Crea tu diseño ahora!";
                 btn.style.display = 'none';
                 btnFinal.style.display = 'block';
             }
