@@ -6,9 +6,8 @@
     <title>RELÁJESE MAMI | Gana tu Premio</title>
     <style>
         :root { 
-            --verde-vuala: #25d366; 
-            --verde-brillante: #2ef77a;
             --amarillo: #ffcc00;
+            --verde-vuala: #25d366; 
         }
         
         body, html { 
@@ -51,19 +50,6 @@
             margin-bottom: 15px;
         }
 
-        .input-codigo {
-            width: 80%;
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid var(--amarillo);
-            background: #000;
-            color: white;
-            text-align: center;
-            font-size: 1rem;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-        }
-
         .btn { 
             display: block; width: 100%; padding: 18px; 
             border-radius: 50px; 
@@ -102,13 +88,7 @@
         <div class="casino-container">
             <h2 class="titulo-moda">🎰 CASINO RELÁJESE MAMI 🎰</h2>
             
-            <div id="seccion-codigo">
-                <p style="color:white; font-size: 0.8rem; margin-bottom: 10px;">Introduce tu código para participar</p>
-                <input type="text" id="codigoUsuario" class="input-codigo" placeholder="Escribe aquí...">
-                <button onclick="validarCodigo()" class="btn btn-girar">Validar Código</button>
-            </div>
-
-            <div id="seccion-juego" style="display: none;">
+            <div id="seccion-juego">
                 <div class="slot-box">
                     <div class="slot"><div class="reel" id="r1"></div></div>
                     <div class="slot"><div class="reel" id="r2"></div></div>
@@ -129,33 +109,17 @@
     </div>
 
     <script>
-        // Imágenes: 1.png (Domicilio), 2.png (20% Desc), 3.png (Camiseta)
+        // Imágenes de premios: 1.png (Domicilio), 2.png (20% Desc), 3.png (Camiseta)
         const figuras = ['1.png', '2.png', '3.png']; 
         let intentosRestantes = 3;
-        let codigoValido = false;
 
-        // Probabilidad: Camiseta (1%), 20% Desc (10%), Domicilio (15%)
+        // Probabilidad de ganar algo en esta sesión (ej. 15% de probabilidad total)
         const azar = Math.floor(Math.random() * 100) + 1;
-        let premioAsignado = null; // 2: Camiseta, 1: 20%, 0: Domicilio
+        let premioAsignado = null; 
 
-        if (azar <= 1) premioAsignado = 2;
-        else if (azar <= 11) premioAsignado = 1;
-        else if (azar <= 26) premioAsignado = 0;
-
-        function validarCodigo() {
-            const cod = document.getElementById('codigoUsuario').value.toLowerCase();
-            // Acepta códigos desde m000r hasta m1000r
-            const regex = /^m([0-9]{1,3}|1000)r$/;
-            
-            if (regex.test(cod) || cod === 'm005r') {
-                document.getElementById('seccion-codigo').style.display = 'none';
-                document.getElementById('seccion-juego').style.display = 'block';
-                document.getElementById('mensaje').innerText = "¡Código aceptado! Tienes 3 intentos.";
-                cargarReel(1); cargarReel(2); cargarReel(3);
-            } else {
-                alert("Código no válido. Por favor, verifica tu compra.");
-            }
-        }
+        if (azar <= 2) premioAsignado = 2;      // 2% Gana Camiseta (3.png)
+        else if (azar <= 10) premioAsignado = 1; // 8% Gana 20% Desc (2.png)
+        else if (azar <= 20) premioAsignado = 0; // 10% Gana Domicilio (1.png)
 
         function cargarReel(id, fFinal = null) {
             const r = document.getElementById('r' + id);
@@ -167,18 +131,22 @@
             return f;
         }
 
+        // Carga inicial de los tambores
+        cargarReel(1); cargarReel(2); cargarReel(3);
+
         function lanzarSuerte() {
             if (intentosRestantes <= 0) return;
             intentosRestantes--;
             document.getElementById('intentos').innerText = intentosRestantes;
             document.getElementById('btnSpin').disabled = true;
-            document.getElementById('mensaje').innerText = "¡Girando...";
+            document.getElementById('mensaje').innerText = "¡Mucha suerte...";
 
             let res = [];
-            // Si tiene premio y es el último intento, gana. Si no, sale random.
+            // Si tiene premio y es el último intento, lo mostramos.
             if (premioAsignado !== null && intentosRestantes === 0) {
                 res = [premioAsignado, premioAsignado, premioAsignado];
             } else {
+                // Genera una combinación que NO sea ganadora (al menos uno diferente)
                 res = [0, 1, 2].sort(() => Math.random() - 0.5);
             }
             
