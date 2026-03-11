@@ -5,45 +5,133 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Vualá | Studio Profesional</title>
     <style>
-        :root { --verde: #25d366; --negro: #000; --gris: #1a1a1a; }
+        :root { 
+            --verde: #25d366; 
+            --verde-brillante: #2ef77a;
+            --negro: #000; 
+            --gris: #1a1a1a; 
+        }
         
         body, html { 
-            margin: 0; background: var(--negro); color: white; 
+            margin: 0; padding: 0;
+            background: var(--negro); 
+            color: white; 
             font-family: 'Arial Black', sans-serif; 
-            text-align: center; overflow-x: hidden;
+            text-align: center; 
+            overflow-x: hidden;
+            width: 100%;
         }
 
-        /* VISOR DE DISEÑO */
+        /* VISOR DE DISEÑO PRINCIPAL */
         .visor-estudio { 
-            position: relative; width: 340px; height: 340px; 
-            background: #111; margin: 20px auto; border-radius: 20px; 
-            border: 2px solid var(--verde); overflow: hidden; touch-action: none;
+            position: relative; 
+            width: 340px; 
+            height: 340px; 
+            background: #111; 
+            margin: 20px auto; 
+            border-radius: 20px; 
+            border: 2px solid var(--verde); 
+            overflow: hidden; 
+            touch-action: none;
+            box-shadow: 0 0 20px rgba(37, 211, 102, 0.2);
         }
-        #camiseta-fondo { width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
+
+        #camiseta-fondo { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: contain; 
+            pointer-events: none; 
+        }
         
         #arte-cliente { 
-            position: absolute; width: 120px; top: 35%; left: 35%; 
-            z-index: 10; cursor: move; 
+            position: absolute; 
+            width: 120px; 
+            top: 35%; 
+            left: 35%; 
+            z-index: 10; 
+            cursor: move; 
         }
-        #img-personalizada { width: 100%; pointer-events: none; }
 
-        /* BOTONES */
-        .controles { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        #img-personalizada { 
+            width: 100%; 
+            pointer-events: none; 
+        }
+
+        /* SECCIÓN DE BOTONES */
+        .controles { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            gap: 12px; 
+            margin-top: 10px;
+        }
+
         .btn-accion { 
-            background: var(--verde); color: white; padding: 18px; 
-            border-radius: 15px; font-weight: bold; width: 340px; 
-            border: none; cursor: pointer; text-transform: uppercase;
+            background: linear-gradient(180deg, var(--verde-brillante) 0%, var(--verde) 100%);
+            color: white; 
+            padding: 18px; 
+            border-radius: 15px; 
+            font-weight: bold; 
+            width: 340px; 
+            border: none; 
+            cursor: pointer; 
+            text-transform: uppercase;
+            box-shadow: 0 4px 0 #128c7e;
+            font-size: 14px;
         }
-        .btn-wa { background: #128c7e; text-decoration: none; color: white; display: block; width: 340px; padding: 18px; border-radius: 15px; font-weight: bold; }
 
-        /* MODAL DE ENTREGAS */
-        .modal { 
-            display: none; position: fixed; z-index: 1000; 
-            left: 0; top: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.95); justify-content: center; align-items: center; 
+        .btn-wa { 
+            background: #128c7e; 
+            text-decoration: none; 
+            color: white; 
+            display: block; 
+            width: 340px; 
+            padding: 18px; 
+            border-radius: 15px; 
+            font-weight: bold; 
+            box-sizing: border-box;
+            text-transform: uppercase;
+            font-size: 14px;
         }
-        .cerrar { position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer; }
-        .foto-entregada { max-width: 85%; max-height: 80vh; border: 3px solid var(--verde); border-radius: 15px; }
+
+        /* MODAL DE ENTREGAS REALES */
+        .modal { 
+            display: none; 
+            position: fixed; 
+            z-index: 1000; 
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: rgba(0,0,0,0.95); 
+            justify-content: center; 
+            align-items: center; 
+            flex-direction: column;
+        }
+
+        .cerrar { 
+            position: absolute; 
+            top: 20px; 
+            right: 30px; 
+            font-size: 45px; 
+            color: white; 
+            cursor: pointer; 
+        }
+
+        .foto-entregada { 
+            max-width: 85%; 
+            max-height: 70vh; 
+            border: 3px solid var(--verde); 
+            border-radius: 15px; 
+            background: #111;
+        }
+
+        .texto-modal {
+            color: var(--verde-brillante);
+            margin-top: 15px;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
     </style>
 </head>
 <body>
@@ -64,14 +152,23 @@
         <span class="cerrar" onclick="cerrarEntregas()">&times;</span>
         <div id="visorFotos">
             </div>
+        <p class="texto-modal">Nuestras entregas reales</p>
     </div>
 
     <script>
-        // Función para identificar la carpeta entregas y la foto1.png
+        // Función para cargar foto1.png de la carpeta entregas
         function abrirEntregas() {
             const visor = document.getElementById('visorFotos');
-            // Configuramos la ruta exacta que pediste
-            visor.innerHTML = `<img src="entregas/foto1.png" class="foto-entregada" alt="Entrega Vualá">`;
+            
+            // Ruta exacta: Carpeta 'entregas', archivo 'foto1.png'
+            // Nota: En GitHub todo debe estar en MINÚSCULAS
+            visor.innerHTML = `<img src="entregas/foto1.png" class="foto-entregada" id="fotoReal">`;
+            
+            const img = document.getElementById('fotoReal');
+            img.onerror = function() {
+                console.error("No se encontró foto1.png en la carpeta entregas.");
+            };
+
             document.getElementById('modalEntregas').style.display = "flex";
         }
 
@@ -79,25 +176,30 @@
             document.getElementById('modalEntregas').style.display = "none";
         }
 
-        // Lógica de movimiento para el diseño
-        const arte = document.getElementById('arte-cliente');
-        let moviendo = false, offsetX = 0, offsetY = 0;
+        // Lógica de movimiento (Drag & Drop) para móviles
+        const item = document.getElementById("arte-cliente");
+        let active = false, currentX, currentY, initialX, initialY, xOffset = 0, yOffset = 0;
 
-        arte.addEventListener('touchstart', (e) => {
-            moviendo = true;
-            const touch = e.touches[0];
-            offsetX = touch.clientX - arte.offsetLeft;
-            offsetY = touch.clientY - arte.offsetTop;
-        });
+        document.addEventListener("touchstart", (e) => {
+            if (e.target === item || item.contains(e.target)) {
+                active = true;
+                initialX = e.touches[0].clientX - xOffset;
+                initialY = e.touches[0].clientY - yOffset;
+            }
+        }, false);
 
-        document.addEventListener('touchmove', (e) => {
-            if (!moviendo) return;
-            const touch = e.touches[0];
-            arte.style.left = (touch.clientX - offsetX) + 'px';
-            arte.style.top = (touch.clientY - offsetY) + 'px';
-        });
+        document.addEventListener("touchend", () => { active = false; }, false);
 
-        document.addEventListener('touchend', () => { moviendo = false; });
+        document.addEventListener("touchmove", (e) => {
+            if (active) {
+                e.preventDefault();
+                currentX = e.touches[0].clientX - initialX;
+                currentY = e.touches[0].clientY - initialY;
+                xOffset = currentX; 
+                yOffset = currentY;
+                item.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+            }
+        }, { passive: false });
     </script>
 </body>
 </html>
