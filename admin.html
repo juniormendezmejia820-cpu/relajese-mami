@@ -1,23 +1,40 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta charset="UTF-8">
     <title>Panel de Control Vualá</title>
     <style>
-        body { background: #111; color: white; font-family: sans-serif; padding: 40px; }
-        .pasos { background: #222; padding: 20px; border-radius: 10px; border-left: 5px solid gold; }
-        code { background: #000; padding: 5px; color: #2ef77a; }
+        body { background: #111; color: white; font-family: sans-serif; padding: 40px; line-height: 1.6; }
+        .pasos { background: #222; padding: 20px; border-radius: 10px; border-left: 5px solid #2ef77a; margin-bottom: 20px; }
+        code { background: #000; padding: 5px; color: #2ef77a; display: block; margin: 10px 0; border: 1px dashed #444; }
+        input { padding: 10px; width: 80%; border-radius: 5px; border: none; margin-top: 10px; }
+        .alerta { color: #ffcc00; font-weight: bold; }
     </style>
 </head>
 <body>
-    <h1>🛠 Panel de Administración (Manual)</h1>
+    <h1>🛠 Panel de Administración Vualá</h1>
+    
     <div class="pasos">
-        <h3>¿Cómo subir una nueva foto de entrega?</h3>
-        <ol>
-            <li>Sube la foto a la carpeta <code>entregas</code> en GitHub.</li>
-            <li>Anota el nombre exacto (ejemplo: <code>cliente_nuevo.jpg</code>).</li>
-            <li>Abre <code>estudio.html</code>, busca la lista <code>const fotosEntregadas = [...]</code> y añade el nombre entre comillas.</li>
-        </ol>
+        <h3>1. Preparar la foto</h3>
+        <p>Asegúrate de que la foto esté en la carpeta <code>entregas</code> y que el nombre no tenga espacios (ejemplo: <code>foto5.png</code>).</p>
     </div>
-    <p><i>Nota: Por seguridad en GitHub Pages, esta es la forma más estable de que las imágenes no se borren.</i></p>
+
+    <div class="pasos">
+        <h3>2. Generador de código</h3>
+        <p>Escribe el nombre de la foto nueva aquí abajo:</p>
+        <input type="text" id="nombreFoto" placeholder="ejemplo: foto1.png" oninput="generarCodigo()">
+        
+        <p>Copia esta línea y pégala en <code>estudio.html</code> dentro de la lista de fotos:</p>
+        <code id="resultado">'foto1.png'</code>
+    </div>
+
+    <p class="alerta">⚠️ Recuerda: Si no subes la foto a GitHub, la página no la encontrará aunque pongas el código.</p>
+
+    <script>
+        function generarCodigo() {
+            let nombre = document.getElementById('nombreFoto').value || 'foto1.png';
+            document.getElementById('resultado').innerText = "'" + nombre + "'";
+        }
+    </script>
 </body>
 </html>
