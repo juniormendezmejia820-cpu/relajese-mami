@@ -3,227 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RELÁJESE MAMI | Studio Profesional</title>
+    <title>Vualá | Studio Profesional</title>
     <style>
-        :root { --amarillo: #ffcc00; --verde: #25d366; --negro-puro: #000; --gris-oscuro: #1a1a1a; --gris-claro: #333; }
+        :root { --verde: #25d366; --negro: #000; --gris: #1a1a1a; }
         
-        html, body { 
-            margin: 0; background: var(--negro-puro); color: white; 
+        body, html { 
+            margin: 0; background: var(--negro); color: white; 
             font-family: 'Arial Black', sans-serif; 
-            overflow-x: hidden; width: 100%; touch-action: manipulation;
-        }
-        
-        #punto-subida { width: 100%; height: 5px; }
-
-        .portada { 
-            width: 100%; height: 180px; 
-            background: url('portada.jpg') #1a1a1a; 
-            background-size: cover; background-position: center;
-            border-bottom: 5px solid var(--verde);
+            text-align: center; overflow-x: hidden;
         }
 
-        .contenedor-principal { 
-            display: flex; gap: 15px; padding: 15px; 
-            justify-content: center; flex-wrap: wrap; 
-            width: 100%; max-width: 1200px; box-sizing: border-box;
-        }
-
+        /* VISOR DE DISEÑO */
         .visor-estudio { 
-            position: relative; width: 95vw; height: 95vw; 
-            max-width: 420px; max-height: 420px;
-            background: #111; border-radius: 25px; border: 1px solid #333;
-            display: flex; justify-content: center; align-items: center; 
-            overflow: hidden; touch-action: none;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative; width: 340px; height: 340px; 
+            background: #111; margin: 20px auto; border-radius: 20px; 
+            border: 2px solid var(--verde); overflow: hidden; touch-action: none;
         }
-
         #camiseta-fondo { width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
-        .logo-marca-fijo { position: absolute; width: 12%; top: 32%; left: 23%; z-index: 5; pointer-events: none; }
         
         #arte-cliente { 
-            position: absolute; width: 140px; z-index: 10; 
-            cursor: move; top: 40%; left: 40%; touch-action: none; 
+            position: absolute; width: 120px; top: 35%; left: 35%; 
+            z-index: 10; cursor: move; 
         }
-        #img-personalizada { width: 100%; display: block; pointer-events: none; }
+        #img-personalizada { width: 100%; pointer-events: none; }
 
-        .controles { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 12px; }
-        .tarjeta { background: var(--gris-oscuro); padding: 15px; border-radius: 20px; border: 1px solid #333; }
-        
-        .grid-colores { 
-            display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; 
-            padding: 5px; background: #000; border-radius: 15px;
-        }
-        .circulo { width: 38px; height: 38px; border-radius: 50%; cursor: pointer; border: 2px solid #333; transition: 0.2s; margin: auto; }
-        .circulo:hover { transform: scale(1.1); border-color: white; }
-
-        @keyframes glowFuego {
-            0% { box-shadow: 0 0 10px #ffcc00; }
-            50% { box-shadow: 0 0 20px #ffcc00; }
-            100% { box-shadow: 0 0 10px #ffcc00; }
-        }
-
-        .btn-coleccion {
-            background: var(--gris-claro); color: white; padding: 18px; border-radius: 20px;
-            font-weight: bold; font-size: 14px; border: 2px solid #555; cursor: pointer;
-            width: 100%; margin-top: 10px; animation: glowFuego 2s infinite ease-in-out;
-        }
-
-        .btn-whatsapp { 
+        /* BOTONES */
+        .controles { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .btn-accion { 
             background: var(--verde); color: white; padding: 18px; 
-            border-radius: 15px; font-weight: bold; font-size: 16px; 
-            text-decoration: none; display: flex; align-items: center; 
-            justify-content: center; gap: 10px; text-transform: uppercase;
+            border-radius: 15px; font-weight: bold; width: 340px; 
+            border: none; cursor: pointer; text-transform: uppercase;
         }
+        .btn-wa { background: #128c7e; text-decoration: none; color: white; display: block; width: 340px; padding: 18px; border-radius: 15px; font-weight: bold; }
 
-        .galeria-artes { width: 100%; padding: 20px; text-align: center; border-top: 1px solid #222; box-sizing: border-box; }
-        .grid-artes { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 12px; padding: 15px 0; max-width: 1000px; margin: 0 auto; }
-        
-        /* BOTONES DE DISEÑO CON ESTILO */
-        .caja-arte { 
-            aspect-ratio: 1/1; background: #1a1a1a; border-radius: 12px; 
-            display: flex; align-items: center; justify-content: center; 
-            border: 1px solid #333; cursor: pointer; transition: 0.3s; 
-            overflow: hidden;
+        /* MODAL DE ENTREGAS */
+        .modal { 
+            display: none; position: fixed; z-index: 1000; 
+            left: 0; top: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.95); justify-content: center; align-items: center; 
         }
-        .caja-arte:hover { border-color: var(--amarillo); transform: translateY(-5px); background: #222; }
-        .caja-arte.activo { border: 3px solid var(--amarillo); transform: scale(1.05); box-shadow: 0 0 15px var(--amarillo); }
-        .caja-arte img { max-width: 80%; max-height: 80%; object-fit: contain; }
-
-        /* MODAL SLIDER */
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.98); backdrop-filter: blur(5px); }
-        .cerrar-modal { position: absolute; top: 20px; right: 20px; color: white; font-size: 45px; font-weight: bold; cursor: pointer; z-index: 1010; }
-        .slider-container { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-        .slider-wrapper { display: flex; height: 100%; width: 100%; transition: transform 0.4s ease-out; }
-        .slide { min-width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
-        .slide img { max-width: 90%; max-height: 85vh; object-fit: contain; }
-
-        .flecha-nav { 
-            position: absolute; top: 50%; transform: translateY(-50%); 
-            background: rgba(255,255,255,0.1); color: white; border: none; 
-            font-size: 30px; padding: 20px; border-radius: 50%; z-index: 1005; 
-        }
-        .prev { left: 20px; }
-        .next { right: 20px; }
+        .cerrar { position: absolute; top: 20px; right: 30px; font-size: 40px; color: white; cursor: pointer; }
+        .foto-entregada { max-width: 85%; max-height: 80vh; border: 3px solid var(--verde); border-radius: 15px; }
     </style>
 </head>
 <body>
 
-    <div class="portada"></div>
-    <div id="punto-subida"></div>
-
-    <div class="contenedor-principal">
-        <div class="visor-estudio" id="espacio-trabajo">
-            <img src="camiseta-base.jpg" id="camiseta-fondo">
-            <img src="logo-mami.png" class="logo-marca-fijo">
-            <div id="arte-cliente">
-                <img src="5.png" id="img-personalizada">
-            </div>
-        </div>
-
-        <div class="controles">
-            <div class="tarjeta">
-                <p style="text-align:center; color:var(--amarillo); margin:0; font-size: 13px;">COLOR DE PRENDA</p>
-                <div class="grid-colores">
-                    <div class="circulo" style="background:#ffffff;" onclick="pintar('none')"></div>
-                    <div class="circulo" style="background:#000000;" onclick="pintar('brightness(0.1)')"></div>
-                    <div class="circulo" style="background:#ff0000;" onclick="pintar('brightness(0.5) sepia(1) hue-rotate(-50deg) saturate(10)')"></div>
-                    <div class="circulo" style="background:#00008b;" onclick="pintar('brightness(0.3) sepia(1) hue-rotate(190deg) saturate(8)')"></div>
-                    <div class="circulo" style="background:#00ff00;" onclick="pintar('brightness(0.6) sepia(1) hue-rotate(80deg) saturate(10)')"></div>
-                    <div class="circulo" style="background:#ffff00;" onclick="pintar('brightness(1.1) sepia(1) hue-rotate(10deg) saturate(5)')"></div>
-                    <div class="circulo" style="background:#ff8800;" onclick="pintar('brightness(0.8) sepia(1) hue-rotate(340deg) saturate(10)')"></div>
-                    <div class="circulo" style="background:#800080;" onclick="pintar('brightness(0.4) sepia(1) hue-rotate(250deg) saturate(6)')"></div>
-                    <div class="circulo" style="background:#ff69b4;" onclick="pintar('brightness(0.7) sepia(1) hue-rotate(290deg) saturate(5)')"></div>
-                    <div class="circulo" style="background:#40e0d0;" onclick="pintar('brightness(0.6) sepia(1) hue-rotate(140deg) saturate(6)')"></div>
-                </div>
-                <button class="btn-coleccion" onclick="abrirModal()">📷 VER NUESTROS TRABAJOS</button>
-            </div>
-            
-            <div class="tarjeta">
-                <p style="text-align:center; font-size:12px; margin:0 0 5px 0;">TAMAÑO</p>
-                <input type="range" min="60" max="300" value="140" style="width:100%; accent-color:var(--amarillo);" 
-                       oninput="document.getElementById('arte-cliente').style.width = this.value + 'px'">
-            </div>
-
-            <a href="https://wa.me/573012134377" target="_blank" class="btn-whatsapp">📱 PEDIR POR WHATSAPP</a>
+    <div class="visor-estudio" id="espacio">
+        <img src="camiseta-base.jpg" id="camiseta-fondo">
+        <div id="arte-cliente">
+            <img src="102.png" id="img-personalizada">
         </div>
     </div>
 
-    <div class="galeria-artes">
-        <h3 style="color:var(--amarillo);">🎨 ELIGE TU DISEÑO</h3>
-        <div class="grid-artes" id="galeria-disenos"></div>
+    <div class="controles">
+        <button class="btn-accion" onclick="abrirEntregas()">📷 TRABAJOS ENTREGADOS</button>
+        <a href="https://wa.me/573012134377" class="btn-wa">📱 PEDIR POR WHATSAPP</a>
     </div>
 
-    <div id="modalColeccion" class="modal">
-        <span class="cerrar-modal" onclick="cerrarModal()">&times;</span>
-        <div class="slider-container">
-            <div class="slider-wrapper" id="sliderWrapper"></div>
-            <button class="flecha-nav prev" onclick="slideAnterior()">&#10094;</button>
-            <button class="flecha-nav next" onclick="slideSiguiente()">&#10095;</button>
-        </div>
+    <div id="modalEntregas" class="modal">
+        <span class="cerrar" onclick="cerrarEntregas()">&times;</span>
+        <div id="visorFotos">
+            </div>
     </div>
 
     <script>
-        function pintar(f) { document.getElementById('camiseta-fondo').style.filter = f; }
-
-        // LISTA DE DISEÑOS BASADA EN TU CARPETA
-        const misDisenos = ['1.png','2.png','3.png','4.png','5.png','6.png','7.png','8.png','9.png','10.png','11.png','12.png','13.png','14.png','15.png','16.png','17.png','18.png','19.png','20.png','21.png','23.png','24.png','25.png','26.png','30.png','100.png','101.png','102.png'];
-        
-        const contenedorGaleria = document.getElementById('galeria-disenos');
-        misDisenos.forEach(a => {
-            const caja = document.createElement('div');
-            caja.className = "caja-arte";
-            caja.id = `btn-${a}`;
-            caja.onclick = () => cambiarArte(a);
-            caja.innerHTML = `<img src="${a}">`;
-            contenedorGaleria.appendChild(caja);
-        });
-
-        function cambiarArte(src) { 
-            document.getElementById('img-personalizada').src = src; 
-            document.getElementById('punto-subida').scrollIntoView({ behavior: 'smooth' });
-            document.querySelectorAll('.caja-arte').forEach(c => c.classList.remove('activo'));
-            document.getElementById('btn-' + src).classList.add('activo');
+        // Función para identificar la carpeta entregas y la foto1.png
+        function abrirEntregas() {
+            const visor = document.getElementById('visorFotos');
+            // Configuramos la ruta exacta que pediste
+            visor.innerHTML = `<img src="entregas/foto1.png" class="foto-entregada" alt="Entrega Vualá">`;
+            document.getElementById('modalEntregas').style.display = "flex";
         }
 
-        // SLIDER DE ENTREGAS
-        const fotosEntregadas = ['foto1.png', 'foto2.png', 'foto3.png']; 
-        const wrapper = document.getElementById('sliderWrapper');
-        let currentIndex = 0;
+        function cerrarEntregas() {
+            document.getElementById('modalEntregas').style.display = "none";
+        }
 
-        fotosEntregadas.forEach(foto => {
-            const slide = document.createElement('div');
-            slide.className = 'slide';
-            slide.innerHTML = `<img src="entregas/${foto}" onerror="this.src='logo-mami.png'">`;
-            wrapper.appendChild(slide);
-        });
-
-        function updateSlider() { wrapper.style.transform = `translateX(-${currentIndex * 100}%)`; }
-        function slideSiguiente() { currentIndex = (currentIndex + 1) % fotosEntregadas.length; updateSlider(); }
-        function slideAnterior() { currentIndex = (currentIndex - 1 + fotosEntregadas.length) % fotosEntregadas.length; updateSlider(); }
-
-        function abrirModal() { document.getElementById('modalColeccion').style.display = "block"; document.body.style.overflow = "hidden"; }
-        function cerrarModal() { document.getElementById('modalColeccion').style.display = "none"; document.body.style.overflow = "auto"; }
-
-        // MOVIMIENTO DEL LOGO
+        // Lógica de movimiento para el diseño
         const arte = document.getElementById('arte-cliente');
-        const visor = document.getElementById('espacio-trabajo');
-        let drag = false;
+        let moviendo = false, offsetX = 0, offsetY = 0;
 
-        function mover(x, y) {
-            if(!drag) return;
-            const r = visor.getBoundingClientRect();
-            let newX = x - r.left - (arte.offsetWidth / 2);
-            let newY = y - r.top - (arte.offsetHeight / 2);
-            arte.style.left = newX + 'px';
-            arte.style.top = newY + 'px';
-        }
+        arte.addEventListener('touchstart', (e) => {
+            moviendo = true;
+            const touch = e.touches[0];
+            offsetX = touch.clientX - arte.offsetLeft;
+            offsetY = touch.clientY - arte.offsetTop;
+        });
 
-        arte.onmousedown = () => drag = true;
-        window.onmouseup = () => drag = false;
-        window.onmousemove = (e) => mover(e.clientX, e.clientY);
-        arte.addEventListener('touchstart', () => drag = true, {passive: false});
-        window.addEventListener('touchend', () => drag = false);
-        window.addEventListener('touchmove', (e) => { if(drag) { e.preventDefault(); mover(e.touches[0].clientX, e.touches[0].clientY); } }, {passive: false});
+        document.addEventListener('touchmove', (e) => {
+            if (!moviendo) return;
+            const touch = e.touches[0];
+            arte.style.left = (touch.clientX - offsetX) + 'px';
+            arte.style.top = (touch.clientY - offsetY) + 'px';
+        });
+
+        document.addEventListener('touchend', () => { moviendo = false; });
     </script>
 </body>
 </html>
